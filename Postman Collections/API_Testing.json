@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "4273c144-2e69-40e8-b4df-d6ada8204089",
+		"name": "ShipArc Engagement API Tests",
+		"description": "Functional, negative, auth, and validation tests for Combined Engagement Score API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"let jsonData = pm.response.json();",
+							"pm.environment.set(\"authToken\", jsonData.token || jsonData.accessToken);",
+							"",
+							"pm.test(\"Auth token stored\", function () {",
+							"    pm.expect(pm.environment.get(\"authToken\")).to.not.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "603be90e-04a0-4bcc-af21-585fe27560b9"
+					}
+				}
+			],
+			"id": "aec53269-4aaa-4d8a-b644-e22543437b06",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"mubarakca@shiparc.ai\",\n  \"password\": \"test@1234\"\n}"
+				},
+				"url": "{{baseUrl}}/api/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Combined Engagement Score (Positive)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time < 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Response has data\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"data\");",
+							"});",
+							"",
+							"pm.test(\"Score is number\", function () {",
+							"    if (jsonData.data && jsonData.data.score !== undefined) {",
+							"        pm.expect(jsonData.data.score).to.be.a(\"number\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Content-Type header\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "fdfef849-594b-4a10-8a5d-98eb4f7a9863"
+					}
+				}
+			],
+			"id": "e640a835-b1d7-40f0-ba60-f6d9d3ee6bb2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score?companyId=cln8k9sfo8290fip8d59mnv8i&vesselIds=all&startDate=2026-03-01T00:00:01.000Z&endDate=2026-03-22T23:59:59.999Z&dateFilter=CUSTOM",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"dashboard",
+						"engagement",
+						"combined-engagement-score"
+					],
+					"query": [
+						{
+							"key": "companyId",
+							"value": "cln8k9sfo8290fip8d59mnv8i"
+						},
+						{
+							"key": "vesselIds",
+							"value": "all"
+						},
+						{
+							"key": "startDate",
+							"value": "2026-03-01T00:00:01.000Z"
+						},
+						{
+							"key": "endDate",
+							"value": "2026-03-22T23:59:59.999Z"
+						},
+						{
+							"key": "dateFilter",
+							"value": "CUSTOM"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Missing companyId (Negative)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should fail (400/422)\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "f37c8453-a5fe-411b-b7ff-0262b9b574e4"
+					}
+				}
+			],
+			"id": "1c85d356-fad9-4055-834b-7d22ad9e6b75",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Invalid Date Format",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid date rejected\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "d575985a-c1ff-4324-94bb-55930b4104e2"
+					}
+				}
+			],
+			"id": "ce68119e-63c2-4d79-93e9-2cc007a67090",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score"
+			},
+			"response": []
+		},
+		{
+			"name": "5. Unauthorized Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Unauthorized blocked\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "5023f5ba-c7b7-4a34-baac-7c3054bcf756"
+					}
+				}
+			],
+			"id": "09c4160a-f60b-41d9-abe8-ea66fb9e857d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score"
+			},
+			"response": []
+		},
+		{
+			"name": "6. Invalid Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid token rejected\", function () {",
+							"    pm.expect(pm.response.code).to.equal(401);",
+							"});"
+						],
+						"type": "text/javascript",
+						"id": "9d551220-caf2-47f1-a323-336dc86e569c"
+					}
+				}
+			],
+			"id": "3bf2947e-ac7c-4844-85e8-079a746c9594",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer invalid_token"
+					}
+				],
+				"url": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://project.shiparc.ai"
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		}
+	]
+}
