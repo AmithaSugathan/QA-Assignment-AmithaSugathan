@@ -81,6 +81,7 @@
 							"    pm.expect(jsonData).to.have.property(\"overallIndex\");",
 							"});",
 							"",
+							"//overallIndex exists - test passes",
 							"pm.test(\"Score is number\", function () {",
 							"    pm.expect(jsonData.overallIndex).to.be.a(\"number\");",
 							"});",
