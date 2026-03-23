@@ -187,13 +187,15 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "d575985a-c1ff-4324-94bb-55930b4104e2",
 						"exec": [
 							"pm.test(\"Invalid date rejected\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
 							"});"
 						],
 						"type": "text/javascript",
-						"id": "d575985a-c1ff-4324-94bb-55930b4104e2"
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
