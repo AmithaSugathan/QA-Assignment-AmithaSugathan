@@ -70,6 +70,7 @@
 							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
 							"});",
 							"",
+							"//Ensures the API response is formatted as JSON",
 							"pm.test(\"Response is JSON\", function () {",
 							"    pm.response.to.be.json;",
 							"});",
