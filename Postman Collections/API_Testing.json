@@ -262,13 +262,18 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "5023f5ba-c7b7-4a34-baac-7c3054bcf756",
 						"exec": [
+							"//The request is sent without valid authentication, like Token",
+							"//401 Unauthorized → User is not authenticated (missing or invalid token).",
+							"//403 Forbidden → User is authenticated but not authorized to access this resource.",
 							"pm.test(\"Unauthorized blocked\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
 							"});"
 						],
 						"type": "text/javascript",
-						"id": "5023f5ba-c7b7-4a34-baac-7c3054bcf756"
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
