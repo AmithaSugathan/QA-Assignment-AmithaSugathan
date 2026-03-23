@@ -155,6 +155,7 @@
 						"id": "f37c8453-a5fe-411b-b7ff-0262b9b574e4",
 						"exec": [
 							"//Passes if the value of pm.response.code is either 400:Bad Request or 422: Unprocessable Entity(logically impossible data)",
+							"//The request is sent without companyId, the API cannot process it properly.Expected response: HTTP 400 (Bad Request) or 422 (Unprocessable Entity)",
 							"pm.test(\"Should fail (400/422)\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
 							"});"
