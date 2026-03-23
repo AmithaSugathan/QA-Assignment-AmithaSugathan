@@ -294,13 +294,16 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "9d551220-caf2-47f1-a323-336dc86e569c",
 						"exec": [
+							"//The API should reject requests with an invalid token",
 							"pm.test(\"Invalid token rejected\", function () {",
 							"    pm.expect(pm.response.code).to.equal(401);",
 							"});"
 						],
 						"type": "text/javascript",
-						"id": "9d551220-caf2-47f1-a323-336dc86e569c"
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
