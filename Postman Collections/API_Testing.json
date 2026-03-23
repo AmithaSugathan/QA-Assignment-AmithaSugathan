@@ -190,8 +190,15 @@
 					"script": {
 						"id": "d575985a-c1ff-4324-94bb-55930b4104e2",
 						"exec": [
+							"//pm.test(\"Invalid date rejected\", function () {",
+							"   // pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+							"//});",
 							"pm.test(\"Invalid date rejected\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+							"",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"updatedAt\");",
+							"    pm.expect(jsonData.updatedAt).to.include(\"date\"); // Ensures error is about date",
 							"});"
 						],
 						"type": "text/javascript",
@@ -212,7 +219,41 @@
 						"value": "Bearer {{authToken}}"
 					}
 				],
-				"url": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score"
+				"url": {
+					"raw": "{{baseUrl}}/api/admin/dashboard/engagement/combined-engagement-score?companyId=cln8k9sfo8290fip8d59mnv8i&vesselIds=all&startDate=2026-03-01T00:00:01.000Z&endDate=2026-03-22T23:59:59.999Z&dateFilter=CUSTOM",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"dashboard",
+						"engagement",
+						"combined-engagement-score"
+					],
+					"query": [
+						{
+							"key": "companyId",
+							"value": "cln8k9sfo8290fip8d59mnv8i"
+						},
+						{
+							"key": "vesselIds",
+							"value": "all"
+						},
+						{
+							"key": "startDate",
+							"value": "2026-03-01T00:00:01.000Z"
+						},
+						{
+							"key": "endDate",
+							"value": "2026-03-22T23:59:59.999Z"
+						},
+						{
+							"key": "dateFilter",
+							"value": "CUSTOM"
+						}
+					]
+				}
 			},
 			"response": []
 		},
