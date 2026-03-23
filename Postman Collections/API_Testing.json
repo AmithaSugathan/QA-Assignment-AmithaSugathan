@@ -12,12 +12,14 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "603be90e-04a0-4bcc-af21-585fe27560b9",
 						"exec": [
 							"pm.test(\"Login successful\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
 							"let jsonData = pm.response.json();",
+							"//Converts the API response body into a JavaScript object. let is used to declare variable",
 							"pm.environment.set(\"authToken\", jsonData.token || jsonData.accessToken);",
 							"",
 							"pm.test(\"Auth token stored\", function () {",
@@ -25,7 +27,8 @@
 							"});"
 						],
 						"type": "text/javascript",
-						"id": "603be90e-04a0-4bcc-af21-585fe27560b9"
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
